@@ -15,7 +15,8 @@ var app = (function () {
             shareEveryone: false,
             shareOrg: false,
             shareGroups: false,
-            username: ''
+            username: '',
+            thumbnail: null
         },
         signin_button;
 
@@ -261,13 +262,13 @@ var app = (function () {
             folderId,
             postUrl,
             request;
-        submitParams.url = document.getElementById('itemURL').value;
-        submitParams.title = document.getElementById('title').value;
-        submitParams.description = document.getElementById('desc').value;
-        submitParams.tags = document.getElementById('tags').value;
-        submitParams.thumbnailurl = document.getElementById('target').src;
-        submitParams.type = "Web Mapping Application";
-        console.log(submitParams);
+//        submitParams.url = document.getElementById('itemURL').value;
+//        submitParams.title = document.getElementById('title').value;
+//        submitParams.description = document.getElementById('desc').value;
+//        submitParams.tags = document.getElementById('tags').value;
+//        submitParams.thumbnailurl = document.getElementById('target').src;
+//        submitParams.type = "Web Mapping Application";
+//        console.log(submitParams);
 
         submitData.append('submmting', 'hello');
         submitData.append('title', document.getElementById('title').value);
@@ -276,7 +277,7 @@ var app = (function () {
         submitData.append('tags', document.getElementById('tags').value);
         //submitData.append('thumbnailurl', document.getElementById('target').src);
         submitData.append('type', "Web Mapping Application");
-        submitData.append('thumbnail', thumbBlob, "thumbnail.jpg");
+        submitData.append('thumbnail', model.thumbnail, "thumbnail.jpg");
 
         folderId = document.getElementById('folder').value;
 
@@ -295,6 +296,8 @@ var app = (function () {
         request.send(submitData);
 
     }
+
+    function shareItem() {}
 
     function toggleElement(element, bool) {
         console.log(element);
@@ -335,18 +338,14 @@ var app = (function () {
         document.getElementById('submitBtn').onclick = addItem;
 
       showButton(signin_button);
-    }
+    },
+      setThumbnail: function(tb) {
+          model.thumbnail = tb;
+      }
   };
 })();
 
 window.onload = app.onload;
-
-
-function savePage() {
-    "use strict";
-    var req = new XMLHttpRequest();
-    request.open('POST', 'https://www.arcgis.com/sharing');
-}
 
 function layout(layoutObj) {
     "use strict";
@@ -354,7 +353,6 @@ function layout(layoutObj) {
     document.getElementById('title').value = layoutObj.title;
     document.getElementById('itemURL').value = layoutObj.url;
 }
-var thumbBlob;
 function setScreenshotUrl(url) {
     "use strict";
     var canvas = document.createElement('canvas'),
@@ -369,7 +367,7 @@ function setScreenshotUrl(url) {
         canvas.height = 133;
         ctx.drawImage(imageObj, 0, 0, 200, 133);
         canvas.toBlob(function(bl){
-            thumbBlob = bl;
+            app.setThumbnail(bl);
         },'image/jpeg',1);
         newURL = canvas.toDataURL('image/jpeg', 1);
         document.getElementById('target').src = newURL;
