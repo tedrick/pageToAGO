@@ -28,19 +28,19 @@
                 <center><img id="target" src="white.png" height="133"></center>
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input id="title" class="form-control" type="text"  placeholder="Email"></input>
+                    <input id="title" class="form-control" type="text"  placeholder="Title" disabled="disabled"></input>
                 </div>
                 <div class="form-group">
                     <label for="desc">Description</label>
-                    <textarea id="desc" class="form-control"   placeholder="Brief Description"></textarea>
+                    <textarea id="desc" class="form-control"   placeholder="Brief Description" disabled="disabled"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="tags">Tags</label>
-                    <input id="tags" class="form-control"   placeholder="Tags"></input>
+                    <input id="tags" class="form-control"   placeholder="Tags" disabled="disabled"></input>
                 </div>
                 <div class="form-group">
                     <label for="folder">Save In:</label>
-                    <select id="folder" class="form-control"></select>
+                    <select id="folder" class="form-control" disabled="disabled"></select>
                 </div>
                 <input type="hidden" id="itemURL" />
                 </form>
@@ -48,12 +48,12 @@
             <div class="col-md-6" style="padding-left:20px; padding-right:20px">
                 <div id="shareEveryone" class="checkbox">
                     <label>
-                        <input type="checkbox"> Everyone
+                        <input id="shareEveryoneCHK" type="checkbox" disabled="disabled"> Everyone
                     </label>
                 </div>
                 <div id="shareOrg" class="checkbox">
                     <label>
-                        <input type="checkbox"> My Organization
+                        <input id="shareOrgCHK"  type="checkbox" disabled="disabled"> My Organization
                     </label>
                 </div>
                 Your Groups:

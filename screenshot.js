@@ -204,6 +204,7 @@ var app = (function () {
         }
 //      populateUserInfo(user_info);
         hideButton(signin_button);
+        enableForm();
         toggleElement('shareEveryone', model.shareEveryone);
         toggleElement('shareOrg', model.shareOrg);
         toggleElement('groupList', model.shareGroups);
@@ -226,6 +227,15 @@ var app = (function () {
             cb.innerHTML = "<label><input type='checkbox' data-id='" + groups[g].id + "'>" +  groups[g].title + "</label>";
             gl.appendChild(cb);
         }
+    }
+
+    function enableForm() {
+        document.getElementById("title").removeAttribute('disabled');
+        document.getElementById("desc").removeAttribute('disabled');
+        document.getElementById("tags").removeAttribute('disabled');
+        document.getElementById("folder").removeAttribute('disabled');
+        document.getElementById("shareEveryoneCHK").removeAttribute('disabled');
+        document.getElementById("shareOrgCHK").removeAttribute('disabled');
     }
 
     function getUserContentList(){
@@ -257,25 +267,16 @@ var app = (function () {
     }
 
     function addItem() {
-        var submitParams = {},
-            submitData = new FormData(),
+        var submitData = new FormData(),
             folderId,
             postUrl,
             request;
-//        submitParams.url = document.getElementById('itemURL').value;
-//        submitParams.title = document.getElementById('title').value;
-//        submitParams.description = document.getElementById('desc').value;
-//        submitParams.tags = document.getElementById('tags').value;
-//        submitParams.thumbnailurl = document.getElementById('target').src;
-//        submitParams.type = "Web Mapping Application";
-//        console.log(submitParams);
 
         submitData.append('submmting', 'hello');
         submitData.append('title', document.getElementById('title').value);
         submitData.append('url', document.getElementById('itemURL').value);
         submitData.append('description', document.getElementById('desc').value);
         submitData.append('tags', document.getElementById('tags').value);
-        //submitData.append('thumbnailurl', document.getElementById('target').src);
         submitData.append('type', "Web Mapping Application");
         submitData.append('thumbnail', model.thumbnail, "thumbnail.jpg");
 
