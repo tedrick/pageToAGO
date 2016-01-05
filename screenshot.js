@@ -12,13 +12,17 @@ var app = (function () {
     },
         model = {
             access_token: null,
+            folderId: '',
             shareEveryone: false,
             shareOrg: false,
             shareGroups: false,
             username: '',
             thumbnail: null
         },
-        signin_button;
+        signin_button,
+        shareEveryone_button,
+        shareOrg_button,
+        shareGroup_buttons = [];
 
     var tokenFetcher = (function () {
         var clientId = 'oKm791TFnRfVDSHQ',
@@ -224,7 +228,7 @@ var app = (function () {
         for (g = 0; g < groups.length; g++) {
             var cb = document.createElement('div');
             cb.className = 'checkbox';
-            cb.innerHTML = "<label><input type='checkbox' data-id='" + groups[g].id + "'>" +  groups[g].title + "</label>";
+            cb.innerHTML = "<label><input class='groupCHK' type='checkbox' data-id='" + groups[g].id + "'>" +  groups[g].title + "</label>";
             gl.appendChild(cb);
         }
     }
@@ -280,11 +284,11 @@ var app = (function () {
         submitData.append('type', "Web Mapping Application");
         submitData.append('thumbnail', model.thumbnail, "thumbnail.jpg");
 
-        folderId = document.getElementById('folder').value;
+        model.folderId = document.getElementById('folder').value;
 
         postUrl = config.portalURL + "sharing/rest/content/users/" + model.username + "/";
-        if (folderId !== '') {
-            postUrl = postUrl + folderId + "/";
+        if (model.folderId !== '') {
+            postUrl = postUrl + model.folderId + "/";
         }
         postUrl = postUrl + "addItem" + "?" + standardParameters();
 
@@ -293,12 +297,49 @@ var app = (function () {
         request.onload = function () {
             console.log('Posted?');
             console.log(request);
+            var response = JSON.parse(request.response);
+            console.log(response.success);
+            if (response.success) {
+                shareItem(response.id);
+            }
         };
         request.send(submitData);
 
     }
 
-    function shareItem() {}
+    function shareItem(id) {
+        var postUrl = config.portalURL + '/sharing/rest/content/users/' + model.username,
+            shareGroups = document.querySelectorAll('.groupCHK'),
+            trueGroups = [],
+            groupList = '',
+            sharingObj = {},
+            sharingText = '',
+            request, g;
+        console.log(shareGroup_buttons);
+        for (g = 0; g < shareGroups.length; g++) {
+            if (shareGroups[g].checked) {
+                trueGroups.push(shareGroups[g].getAttribute('data-id'));
+            }
+        }
+        sharingText = '&everyone=' + shareEveryone_button.checked.toString();
+        sharingText += '&org' + shareOrg_button.checked.toString();
+        if (trueGroups.length > 0) {
+            sharingText += "&groups=" + trueGroups.join(',');
+        }
+         if (model.folderId !== '') {
+            postUrl = postUrl + model.folderId + "/";
+        }
+        postUrl = postUrl + "/items/" + id + "/share?" + standardParameters() + sharingText;
+
+        request = new XMLHttpRequest();
+        request.open("POST", postUrl, true);
+        request.onload = function () {
+            alert('Item Shared');
+            window.close();
+        };
+        request.send();
+
+    }
 
     function toggleElement(element, bool) {
         console.log(element);
@@ -337,7 +378,8 @@ var app = (function () {
       signin_button = document.querySelector('#signin');
       signin_button.onclick = interactiveSignIn;
         document.getElementById('submitBtn').onclick = addItem;
-
+        shareEveryone_button = document.querySelector('#shareEveryoneCHK');
+        shareOrg_button = document.querySelector('#shareOrgCHK');
       showButton(signin_button);
     },
       setThumbnail: function(tb) {
